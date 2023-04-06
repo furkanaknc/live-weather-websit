@@ -1,0 +1,56 @@
+body {
+  padding-top: 10%;
+  background-color: #2F3441;
+  background-size: 100vw 100vh;
+  background-position: center;
+  opacity: 0.9;
+}
+
+
+h1,h2{
+  font-family: "Montserrat",sans-serif;
+  font-weight: bolder;
+  color: #3CF8C4
+  
+}
+
+p{
+  font-family: 'Roboto Mono', monospace;
+  font-size: large;
+  color: #D94434;
+}
+
+
+
+.btn-lg {
+  width: 150px;
+}
+.btn-secondary{
+  background-color: #D94434!important;
+  border-color: #D94434!important;
+}
+.btn-secondary:hover{
+  color: #D94434;
+  background-color: #2F3441!important;
+}
+.city-input{
+  font-family: 'Roboto Mono', monospace;
+  font-size: large;
+  color: #D94434;
+}
+
+.input-text{
+  font-family: 'Roboto Mono', monospace;
+  font-size: large;
+  color: #2F3441;
+  
+}
+
+.row p {
+  display: inline-block;
+  margin-right: 10px;
+  color:#D94434 ;
+}
+
+
+
