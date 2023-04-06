@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const https = require("https");
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
-  const apiKey = "KGc5Rn8SPqO8pvfKCUA5kCfXdGWVMTgIhTEBhDdb";
+  const apiKey =  process.env.nasaApi;
   const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
 
   https.get(url, function (response) {
@@ -28,7 +29,7 @@ app.get("/", function (req, res) {
 
 app.post("/", function (req, res) {
   const query = req.body.cityName;
-  const apiKey = "97f72b416558444ee7d061be22c017c4";
+  const apiKey = process.env.weatherApi;
   const unit = "metric";
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}&units=${unit}`;
 
@@ -68,8 +69,8 @@ app.get("/signup", function (req, res) {
   res.render("signup");
 });
 
-const apiKey = "91a2012fe8e31811c4c4dbbd1bb6cd93-us21";
-const listId = "2f73be8143";
+const apiKey =  process.env.mailchimpApi;
+const listId =  process.env.mailchimpListId;
 
 app.post("/signup", function (req, res) {
   const mailData = {
@@ -114,6 +115,7 @@ app.post("/signup", function (req, res) {
 
 
 
-app.listen(3000, function () {
-  console.log("Server is running on port 3000.");
+app.listen(process.env.PORT || 3000, function () {
+  console.log("Server is running on port " + (process.env.PORT || 3000));
 });
+
