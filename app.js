@@ -13,8 +13,8 @@ app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
-  const apiKey =  process.env.nasaApi;
-  const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+  const nApiKey =  process.env.NASA_API;
+  const url = `https://api.nasa.gov/planetary/apod?api_key=${nApiKey}`;
 
   https.get(url, function (response) {
     console.log(response.statusCode);
@@ -29,9 +29,9 @@ app.get("/", function (req, res) {
 
 app.post("/", function (req, res) {
   const query = req.body.cityName;
-  const apiKey = process.env.weatherApi;
+  const wApiKey = process.env.WEATHER_API;
   const unit = "metric";
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}&units=${unit}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${wApiKey}&units=${unit}`;
 
   https.get(url, function (response) {
     console.log(response.statusCode);
@@ -43,8 +43,8 @@ app.post("/", function (req, res) {
       const icon = weatherData.weather[0].icon;
       const imageURL = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
-      const apiKey = "KGc5Rn8SPqO8pvfKCUA5kCfXdGWVMTgIhTEBhDdb";
-      const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+      const nApiKey = process.env.NASA_API;
+      const url = `https://api.nasa.gov/planetary/apod?api_key=${nApiKey}`;
 
       https.get(url, function (response) {
         console.log(response.statusCode);
@@ -69,7 +69,7 @@ app.get("/signup", function (req, res) {
   res.render("signup");
 });
 
-const apiKey =  process.env.mailchimpApi;
+const mApiKey =  process.env.MAILCHIMP_API;
 const listId =  process.env.mailchimpListId;
 
 app.post("/signup", function (req, res) {
@@ -90,7 +90,7 @@ app.post("/signup", function (req, res) {
 
   const options = {
     method: "POST",
-    auth: `furkan:${apiKey}`,
+    auth: `furkan:${mApiKey}`,
     headers: {
       "Content-Type": "application/json",
     },
