@@ -5,35 +5,21 @@ const app = express();
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 
-
-
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
-  const nApiKey =  process.env.NASA_API;
-  const url = `https://api.nasa.gov/planetary/apod?api_key=${nApiKey}`;
-
-  https.get(url, function (response) {
-    console.log(response.statusCode);
-    response.on("data", function (data) {
-      const apodData = JSON.parse(data);
-      const imageURL = apodData.hdurl;
-
-      res.render("index", { backgroundImageURL: imageURL });
-    });
-  });
+  res.render("index");
 });
 
 app.post("/", function (req, res) {
   const query = req.body.cityName;
-  const wApiKey = process.env.WEATHER_API;
+  const weatherApiKey = process.env.WEATHER_API;
   const unit = "metric";
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${wApiKey}&units=${unit}`;
+  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${weatherApiKey}&units=${unit}`;
 
-  https.get(url, function (response) {
+  https.get(weatherUrl, function (response) {
     console.log(response.statusCode);
 
     response.on("data", function (data) {
@@ -41,36 +27,25 @@ app.post("/", function (req, res) {
       const temp = weatherData.main.temp;
       const description = weatherData.weather[0].description;
       const icon = weatherData.weather[0].icon;
-      const imageURL = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+      const weatherImageUrl = `https://openweathermap.org/img/wn/${icon}.png`;
 
-      const nApiKey = process.env.NASA_API;
-      const url = `https://api.nasa.gov/planetary/apod?api_key=${nApiKey}`;
-
-      https.get(url, function (response) {
-        console.log(response.statusCode);
-        response.on("data", function (data) {
-          const apodData = JSON.parse(data);
-          const backgroundImageURL = apodData.hdurl;
-
-          res.render("weather", {
-            city: query,
-            temperature: temp,
-            description: description,
-            imageURL: imageURL,
-            backgroundImageURL: backgroundImageURL,
-          });
-        });
+      res.render("weather", {
+        city: query,
+        temperature: temp,
+        description: description,
+        weatherImageUrl: weatherImageUrl,
       });
+      
     });
   });
 });
 
+const mailchimpApiKey = process.env.MAILCHIMP_API;
+const mailchimpListId = process.env.MAILCHIMP_LIST_ID;
+
 app.get("/signup", function (req, res) {
   res.render("signup");
 });
-
-const mApiKey =  process.env.MAILCHIMP_API;
-const listId =  process.env.mailchimpListId;
 
 app.post("/signup", function (req, res) {
   const mailData = {
@@ -90,15 +65,15 @@ app.post("/signup", function (req, res) {
 
   const options = {
     method: "POST",
-    auth: `furkan:${mApiKey}`,
+    auth: `anystring:${mailchimpApiKey}`,
     headers: {
       "Content-Type": "application/json",
     },
   };
 
-  const mailUrl = `https://us21.api.mailchimp.com/3.0/lists/${listId}`;
+  const mailchimpUrl = `https://us21.api.mailchimp.com/3.0/lists/${mailchimpListId}`;
 
-  const request = https.request(mailUrl, options, function (response) {
+  const request = https.request(mailchimpUrl, options, function (response) {
     console.log(response.statusCode);
 
     if (response.statusCode === 200) {
@@ -112,10 +87,6 @@ app.post("/signup", function (req, res) {
   request.end();
 });
 
-
-
-
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server is running on port " + (process.env.PORT || 3000));
 });
-
